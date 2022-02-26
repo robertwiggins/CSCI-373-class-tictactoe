@@ -1,0 +1,80 @@
+#include <cstdlib> 
+#include <iostream>
+using namespace std; 
+
+class tictactoe {
+    
+public:
+   
+    static const int X = 1, O = -1, EMPTY = 0;
+    int board[3][3];
+    int currentPlayer; 
+    
+    void clearBoard() {
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                board[i][j] = EMPTY;
+        currentPlayer = O; 
+    }
+    void putMark(int i, int j) {
+        board[i][j] = currentPlayer;
+        currentPlayer = -currentPlayer;
+    }
+    bool isWin(int mark) {
+        int win = 3 * mark; 
+        return ((board[0][0] + board[0][1] + board[0][2] == win) 
+            || (board[1][0] + board[1][1] + board[1][2] == win) 
+            || (board[2][0] + board[2][1] + board[2][2] == win)
+            || (board[0][0] + board[1][0] + board[2][0] == win) 
+            || (board[0][1] + board[1][1] + board[2][1] == win) 
+            || (board[0][2] + board[1][2] + board[2][2] == win) 
+            || (board[0][0] + board[1][1] + board[2][2] == win) 
+            || (board[2][0] + board[1][1] + board[0][2] == win)); 
+    }
+    
+    int getWinner() {
+        if (isWin(X)) return X;
+        else if (isWin(O)) return O;
+        else return EMPTY;
+    }
+    
+    friend ostream& operator<<(ostream& output, const tictactoe& obj) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                switch (obj.board[i][j]) {
+                case X: output << "X"; break;
+                case O: output << "O"; break;
+                case EMPTY: output << " "; break;
+                }
+                if (j < 2) output << "|"; 
+            }
+            if (i < 2) output << "\n-+-+-\n"; 
+        }
+        return output;
+    }
+};
+
+
+int main() {
+    
+    tictactoe obj1;
+    obj1.clearBoard();
+    obj1.putMark(0, 0);
+    cout << obj1 << "\n\n";
+
+    obj1.putMark(0, 2); cout << obj1 << "\n\n";
+    obj1.putMark(0, 1); cout << obj1 << "\n\n";
+    obj1.putMark(1, 1); cout << obj1 << "\n\n";
+    obj1.putMark(2, 0); cout << obj1 << "\n\n";
+    obj1.putMark(1, 2); cout << obj1 << "\n\n";
+    obj1.putMark(2, 2); cout << obj1 << "\n\n";
+    obj1.putMark(2, 1); cout << obj1 << "\n\n";
+    obj1.putMark(1, 0); cout << obj1;
+
+    int winner = obj1.getWinner();
+    if (winner != obj1.EMPTY)
+        cout << " " << (winner == obj1.X ? 'X' : 'O') << " wins." << endl;
+    else
+        cout << "Tie" << endl;
+    return EXIT_SUCCESS;
+}
